@@ -3,7 +3,8 @@ import { auth, db, messaging } from "./firebase/config";
 import SignUp from "./pages/SignUp";
 import { getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
-
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 enum NotificationType {
   "Notification-1",
@@ -42,37 +43,51 @@ const App = () => {
   useEffect(() => {
     onMessage(messaging, (payload) => {
       console.log(payload);
-    });
+      toast.success('🦄 Wow so easy!', {
+        position: "top-center",
+        autoClose: false,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+            });
   });
 
   return (
-    <div>
-      <button
-        className="btn btn-outline"
-        onClick={() =>
-          handleNotificationBtnClick(NotificationType["Notification-1"])
-        }
-      >
-        Notification 1
-      </button>
-      <button
-        className="btn btn-outline"
-        onClick={() =>
-          handleNotificationBtnClick(NotificationType["Notification-2"])
-        }
-      >
-        Notification 2
-      </button>
-      <button
-        className="btn btn-outline"
-        onClick={() =>
-          handleNotificationBtnClick(NotificationType["Notification-3"])
-        }
-      >
-        Notification 3
-      </button>
-      {!auth.currentUser?.uid && <SignUp />}
-    </div>
+    <>
+      <ToastContainer />
+      <div>
+        <button
+          className="btn btn-outline"
+          onClick={() =>
+            handleNotificationBtnClick(NotificationType["Notification-1"])
+          }
+        >
+          Notification 1
+        </button>
+        <button
+          className="btn btn-outline"
+          onClick={() =>
+            handleNotificationBtnClick(NotificationType["Notification-2"])
+          }
+        >
+          Notification 2
+        </button>
+        <button
+          className="btn btn-outline"
+          onClick={() =>
+            handleNotificationBtnClick(NotificationType["Notification-3"])
+          }
+        >
+          Notification 3
+        </button>
+        {!auth.currentUser?.uid && <SignUp />}
+      </div>
+    </>
   );
 };
 

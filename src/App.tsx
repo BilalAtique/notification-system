@@ -4,6 +4,7 @@ import { getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { markNotificationsAsRead } from "./firebase/notifications";
 
 enum NotificationType {
   "Notification-1",
@@ -40,7 +41,6 @@ const App = () => {
 
   useEffect(() => {
     onMessage(messaging, (payload) => {
-      console.log(payload);
       toast.success(payload.notification?.title, {
         position: "top-center",
         autoClose: false,
@@ -51,7 +51,10 @@ const App = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        onClick: () => console.log(payload)
+        onClick: async () => {
+          const notificationId = payload.notification?.body;
+          if (notificationId) await markNotificationsAsRead(notificationId);
+        },
       });
     });
   }, []);

@@ -1,16 +1,13 @@
-import { addDoc, collection } from "firebase/firestore";
-import { db, messaging } from "./firebase/config";
-import { getToken, onMessage } from "firebase/messaging";
+import {  messaging } from "./firebase/config";
+import { onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { markNotificationsAsRead } from "./firebase/notifications";
-
-enum NotificationType {
-  "Notification-1",
-  "Notification-2",
-  "Notification-3",
-}
+import {
+  addNotification,
+  markNotificationsAsRead,
+} from "./firebase/notifications";
+import { NotificationType } from "./CONST";
 
 const App = () => {
   const handleNotificationBtnClick = async (
@@ -21,16 +18,7 @@ const App = () => {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
         console.log("Notification permission granted.");
-        const token = await getToken(messaging, {
-          vapidKey: import.meta.env.VITE_MESSAGING_TOKEN,
-        });
-        //add notification in firestore
-        const docRef = await addDoc(collection(db, "notifications"), {
-          deviceToken: token,
-          type: NotificationType[notificationType],
-          isRead: false,
-        });
-        console.log("Document written with ID: ", docRef.id);
+        addNotification(notificationType);
       } else {
         console.log("Notification permission not granted.");
       }
@@ -51,6 +39,7 @@ const App = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
+        // Mark notification as read when clicked
         onClick: async () => {
           const notificationId = payload.notification?.body;
           if (notificationId) await markNotificationsAsRead(notificationId);

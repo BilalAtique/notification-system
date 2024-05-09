@@ -1,6 +1,5 @@
 import { addDoc, collection } from "firebase/firestore";
-import { auth, db, messaging } from "./firebase/config";
-import SignUp from "./pages/SignUp";
+import { db, messaging } from "./firebase/config";
 import { getToken, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
@@ -26,7 +25,6 @@ const App = () => {
         });
         //add notification in firestore
         const docRef = await addDoc(collection(db, "notifications"), {
-          userId: auth.currentUser?.uid,
           deviceToken: token,
           type: NotificationType[notificationType],
           isRead: false,
@@ -43,7 +41,7 @@ const App = () => {
   useEffect(() => {
     onMessage(messaging, (payload) => {
       console.log(payload);
-      toast.success('🦄 Wow so easy!', {
+      toast.success(payload.notification?.title, {
         position: "top-center",
         autoClose: false,
         hideProgressBar: false,
@@ -53,9 +51,10 @@ const App = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        });
-            });
-  });
+        onClick: () => console.log(payload)
+      });
+    });
+  }, []);
 
   return (
     <>
@@ -85,7 +84,6 @@ const App = () => {
         >
           Notification 3
         </button>
-        {!auth.currentUser?.uid && <SignUp />}
       </div>
     </>
   );

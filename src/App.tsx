@@ -1,4 +1,4 @@
-import {  messaging } from "./firebase/config";
+import { messaging } from "./firebase/config";
 import { onMessage } from "firebase/messaging";
 import { useEffect } from "react";
 import { Bounce, ToastContainer, toast } from "react-toastify";
@@ -51,31 +51,33 @@ const App = () => {
   return (
     <>
       <ToastContainer />
-      <div>
-        <button
-          className="btn btn-outline"
-          onClick={() =>
-            handleNotificationBtnClick(NotificationType["Notification-1"])
-          }
-        >
-          Notification 1
-        </button>
-        <button
-          className="btn btn-outline"
-          onClick={() =>
-            handleNotificationBtnClick(NotificationType["Notification-2"])
-          }
-        >
-          Notification 2
-        </button>
-        <button
-          className="btn btn-outline"
-          onClick={() =>
-            handleNotificationBtnClick(NotificationType["Notification-3"])
-          }
-        >
-          Notification 3
-        </button>
+      <div className="h-screen w-screen flex justify-center items-center">
+        <div className="flex gap-4 flex-wrap mx-8 justify-center">
+          <button
+            className="btn btn-outline btn-lg btn-primary"
+            onClick={() =>
+              handleNotificationBtnClick(NotificationType["Notification-1"])
+            }
+          >
+            Notification 1
+          </button>
+          <button
+            className="btn btn-outline btn-lg btn-secondary"
+            onClick={() =>
+              handleNotificationBtnClick(NotificationType["Notification-2"])
+            }
+          >
+            Notification 2
+          </button>
+          <button
+            className="btn btn-outline btn-lg btn-accent"
+            onClick={() =>
+              handleNotificationBtnClick(NotificationType["Notification-3"])
+            }
+          >
+            Notification 3
+          </button>
+        </div>
       </div>
     </>
   );

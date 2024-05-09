@@ -1,7 +1,8 @@
 import { addDoc, collection } from "firebase/firestore";
 import { auth, db, messaging } from "./firebase/config";
 import SignUp from "./pages/SignUp";
-import { getToken } from "firebase/messaging";
+import { getToken, onMessage } from "firebase/messaging";
+import { useEffect } from "react";
 
 
 enum NotificationType {
@@ -37,6 +38,12 @@ const App = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    onMessage(messaging, (payload) => {
+      console.log(payload);
+    });
+  });
 
   return (
     <div>

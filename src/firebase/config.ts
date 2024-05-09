@@ -18,19 +18,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const messaging = getMessaging(app);
-getToken(messaging, { vapidKey: import.meta.env.VITE_MESSAGING_TOKEN });
-
-//Foreground message listener
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      resolve(payload);
-    });
-  });
 
 if (location.hostname === "localhost") {
   connectAuthEmulator(auth, "http://127.0.0.1:9099");
   connectFirestoreEmulator(db, "127.0.0.1", 8080);
 }
 
-export { app, db, auth };
+export { app, db, auth, messaging };

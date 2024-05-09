@@ -16,7 +16,7 @@ exports.sendNotification = onDocumentCreated(
 
     const payload = {
       notification: {
-        title: "New Message",
+        title: `New Notification of type ${data.type}`,
         body: snapshot.id
       },
     };

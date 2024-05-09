@@ -14,7 +14,8 @@ const App = () => {
     console.log(NotificationType[notificationType]);
     const docRef = await addDoc(collection(db, "notifications"), {
       userId: auth.currentUser?.uid,
-      type: NotificationType[notificationType]
+      type: NotificationType[notificationType],
+      isRead: false
     });
     console.log("Document written with ID: ", docRef.id); 
   }

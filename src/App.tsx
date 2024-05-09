@@ -1,6 +1,8 @@
 import { addDoc, collection } from "firebase/firestore";
-import { auth, db } from "./firebase/config";
+import { auth, db, messaging } from "./firebase/config";
 import SignUp from "./pages/SignUp";
+import { getToken } from "firebase/messaging";
+
 
 enum NotificationType {
   "Notification-1",
@@ -13,18 +15,21 @@ const App = () => {
     notificationType: NotificationType
   ) => {
     try {
-      //add notification in firestore
-      const docRef = await addDoc(collection(db, "notifications"), {
-        userId: auth.currentUser?.uid,
-        type: NotificationType[notificationType],
-        isRead: false,
-      });
-      console.log("Document written with ID: ", docRef.id);
-  
       // Request permission for showing notification
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
         console.log("Notification permission granted.");
+        const token = await getToken(messaging, {
+          vapidKey: import.meta.env.VITE_MESSAGING_TOKEN,
+        });
+        //add notification in firestore
+        const docRef = await addDoc(collection(db, "notifications"), {
+          userId: auth.currentUser?.uid,
+          deviceToken: token,
+          type: NotificationType[notificationType],
+          isRead: false,
+        });
+        console.log("Document written with ID: ", docRef.id);
       } else {
         console.log("Notification permission not granted.");
       }
